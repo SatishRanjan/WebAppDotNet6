@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Microsoft.Extensions.Configuration IConfiguration for Dotnet 6</h1>   
+    <br />
+    @{
+        AppSettingsModel appSettingModel = ViewBag.AppSettings;
+
+        foreach(KeyValuePair<string, string> keyVal in appSettingModel.AppSettings)
+        {
+            if (@keyVal.Key.StartsWith("APP_SETTING_KEY"))
+            {
+                <p style="background-color:cyan;" align="left">Key :@keyVal.Key, Value = @keyVal.Value </p>
+            }
+            else
+            {
+                 <p style="background-color:yellow;" align="left">Key :@keyVal.Key, Value = @keyVal.Value </p>
+            }
+        }
+    }
+
+</div>
