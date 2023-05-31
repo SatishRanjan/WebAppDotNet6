@@ -1,0 +1,29 @@
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-nanoserver-20H2 AS base
+#FROM mcr.microsoft.com/dotnet/aspnet:6.0-nanoserver-ltsc2022 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["WebAppDotNet6.csproj", ""]
+RUN dotnet restore "./WebAppDotNet6.csproj"
+COPY . .
+WORKDIR "/src/."
+RUN dotnet build "WebAppDotNet6.csproj" -c Release -o /app/build
+FROM build AS publish
+RUN dotnet publish "WebAppDotNet6.csproj" -c Release -o /app/publish
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+COPY tz-6 /tz-6
+COPY cert-test /cert-test
+COPY certsname-printer /certsname-printer
+COPY update-history-util /update-history-util
+COPY certificates/ /certs/
+ENV WEBSITE_PRIVATE_CERTS_PATH="c:\certs\private"
+ENV WEBSITE_PUBLIC_CERTS_PATH="c:\certs\public"
+ENV WEBSITE_INTERMEDIATE_CERTS_PATH="c:\certs\intermediate"
+ENV WEBSITE_ROOT_CERTS_PATH="c:\certs\root"
+COPY startuphook /startuphook
+ENV DOTNET_STARTUP_HOOKS="c:\startuphook\StaruphookLib.dll"
+ENTRYPOINT ["dotnet", "WebAppDotNet6.dll"]

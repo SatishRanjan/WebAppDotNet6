@@ -1,0 +1,37 @@
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+#EXPOSE 50555
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["WebAppDotNet6.csproj", ""]
+RUN dotnet restore "./WebAppDotNet6.csproj"
+COPY . .
+WORKDIR "/src/."
+RUN dotnet build "WebAppDotNet6.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "WebAppDotNet6.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+COPY tz-6 /tz-6
+COPY cert-test /cert-test
+COPY certsname-printer /certsname-printer
+COPY update-history-util /update-history-util
+COPY certificates/ /certs/
+COPY kuduagent /kuduagent
+
+ENV WEBSITE_PRIVATE_CERTS_PATH="/certs/private"
+ENV WEBSITE_PUBLIC_CERTS_PATH="/certs/public"
+ENV WEBSITE_INTERMEDIATE_CERTS_PATH="/certs/intermediate"
+ENV WEBSITE_ROOT_CERTS_PATH="/certs/root"
+COPY startuphook /startuphook
+ENV DOTNET_STARTUP_HOOKS="/startuphook/StaruphookLib.dll"
+
+ENTRYPOINT ["dotnet", "WebAppDotNet6.dll"]
