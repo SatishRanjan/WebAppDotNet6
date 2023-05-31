@@ -2,13 +2,13 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Microsoft.Extensions.Configuration IConfiguration for Dotnet 6</h1>   
+<div class="text-center" style="background-color:grey">
+    <h1 class="display-4">Welcome to Microsoft.Extensions.Configuration IConfiguration for Dotnet 6 - v1.9-Linux</h1>
     <br />
     @{
         AppSettingsModel appSettingModel = ViewBag.AppSettings;
 
-        foreach(KeyValuePair<string, string> keyVal in appSettingModel.AppSettings)
+        foreach (KeyValuePair<string, string> keyVal in appSettingModel.AppSettings)
         {
             if (@keyVal.Key.StartsWith("APP_SETTING_KEY"))
             {
@@ -16,9 +16,46 @@
             }
             else
             {
-                 <p style="background-color:yellow;" align="left">Key :@keyVal.Key, Value = @keyVal.Value </p>
+                <p style="background-color:yellow;" align="left">Key :@keyVal.Key, Value = @keyVal.Value </p>
             }
         }
     }
+
+    <br />
+    <p>Certificates Subject Names:</p>
+    @{
+        if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+        {
+            List<string> certificateSubjectNames = ViewBag.CertificatesSubjectName;
+
+            foreach (string name in certificateSubjectNames)
+            {
+                if (name.ToLower().Contains("satishra"))
+                {
+                    <p style="background-color:chartreuse;" align="left">@name</p>
+                }
+                else
+                {
+                    <p style="background-color:cadetblue;" align="left">@name</p>
+                }
+            }
+        }
+       
+    }
+
+    <br />
+    <p>Certificates Evironment variable values:</p>
+    @{
+        if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+        {
+            Dictionary<string, string?> certificateEnvVars = ViewBag.CertsEnvVariables;
+
+            foreach (KeyValuePair<string, string?> keyVal in certificateEnvVars)
+            {
+                <p style="background-color:cornflowerblue;" align="left">Key :@keyVal.Key, Value = @keyVal.Value </p>
+            }
+        }      
+    }
+
 
 </div>
