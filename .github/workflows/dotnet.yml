@@ -61,8 +61,7 @@ jobs:
       id: deploywebapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.app-name }}
-        slot-name: prod
+        app-name: ${{ env.app-name }}        
         package: website
         
     - name: az cli logout
