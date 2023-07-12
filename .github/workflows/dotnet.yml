@@ -8,7 +8,10 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
+env:
+  app-name: "githubactionapp1"
+  rg-name: "satishra-eastus-rg"
+  
 jobs:
   build:
 
@@ -34,3 +37,33 @@ jobs:
         name: website
         path: website/**
         if-no-files-found: error
+        
+  deploy_prod:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: PROD
+      url: ${{ steps.deploywebapp.outputs.webapp-url }}
+
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: website
+        path: website
+        
+    - name: Login via Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy web app
+      id: deploywebapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.app-name }}
+        slot-name: prod
+        package: website
+        
+    - name: az cli logout
+      run: az logout
