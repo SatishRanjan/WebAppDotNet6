@@ -24,7 +24,7 @@ steps:
     azureSubscription: 'Private Test Sub SATISHRA(1a1a4b96-0df2-487e-9d64-f44304383fe6)'
     appType: 'webAppHyperVContainer'
     WebAppName: 'wincontainerdevops1'
-    DockerNamespace: 'docker.io/sratdocker'
+    DockerNamespace: 'sratdocker.docker.io'
     DockerRepository: 'dotnet6nanoapp'
 
 - task: VSBuild@1
