@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="LogonUtil\" />
+    <Folder Include="kuduagent_win\" />
+    <Folder Include="greeter\" />
     <Folder Include="startuphook\" />
   </ItemGroup>
 

@@ -20,10 +20,21 @@ COPY cert-test /cert-test
 COPY certsname-printer /certsname-printer
 COPY update-history-util /update-history-util
 COPY certificates/ /certs/
+COPY LogonUtil /logonutil
+COPY kuduagent_win /kuduagent
+
 ENV WEBSITE_PRIVATE_CERTS_PATH="c:\certs\private"
 ENV WEBSITE_PUBLIC_CERTS_PATH="c:\certs\public"
 ENV WEBSITE_INTERMEDIATE_CERTS_PATH="c:\certs\intermediate"
 ENV WEBSITE_ROOT_CERTS_PATH="c:\certs\root"
 COPY startuphook /startuphook
 ENV DOTNET_STARTUP_HOOKS="c:\startuphook\StaruphookLib.dll"
+#ENV Kestrel:Endpoints:Http:Url="http://*:80"
+ENV TEST_ENV=true
+
 ENTRYPOINT ["dotnet", "WebAppDotNet6.dll"]
+
+
+#docker build . -t sratdocker/dotnet6webappwindows -f Dockerfile-win
+# expose webapp's container port 80 on host port 5001 and webjobs port 50555 on host port 5002
+#docker run -p 5001:80 -p 5002:50555 docker.io/sratdocker/dotnet6webappwindows
