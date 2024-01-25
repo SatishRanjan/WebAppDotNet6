@@ -25,7 +25,7 @@ steps:
     appType: 'webAppHyperVContainer'
     WebAppName: 'wincontainerdevops1'
     DockerNamespace: 'index.docker.io/sratdocker'
-    DockerRepository: 'dotnet6nanoapp'
+    DockerRepository: 'dotnet6nanocertutil'
 
 - task: VSBuild@1
   inputs:

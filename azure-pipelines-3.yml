@@ -1,4 +1,12 @@
 # ASP.NET Core (.NET Framework)
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Private Test Sub SATISHRA(1a1a4b96-0df2-487e-9d64-f44304383fe6)'
+    appType: 'webAppHyperVContainer'
+    WebAppName: 'wincontainerdevops1'
+    DockerNamespace: 'index.docker.io/sratdocker'
+    DockerRepository: 'dotnet6nanocertutil'
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
@@ -18,14 +26,8 @@ steps:
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
-- task: AzureRmWebAppDeployment@4
   inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Private Test Sub SATISHRA(1a1a4b96-0df2-487e-9d64-f44304383fe6)'
-    appType: 'webAppHyperVContainer'
-    WebAppName: 'wincontainerdevops1'
-    DockerNamespace: 'index.docker.io/sratdocker'
-    DockerRepository: 'dotnet6nanoapp'
+    restoreSolution: '$(solution)'
 
 - task: VSBuild@1
   inputs:
