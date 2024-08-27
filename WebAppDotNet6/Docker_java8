@@ -17,6 +17,6 @@ ENV WEBJOB_HOME=/home
 #ENTRYPOINT ["dotnet", "WebAppDotNet6.dll"]
 #ENTRYPOINT ["bash", "/startup/startup.sh"]
 
-# docker build . -t sratdocker/dotnet6webapplinux -f Dockerfile-linux
+# docker build . -t sratdocker/dotnet8webapplinux -f Dockerfile-linux
 # expose webapp's container port 80 on host port 5001 and webjobs port 50555 on host port 5002
 # docker run -p 5001:80 -p 5002:50555 docker.io/sratdocker/dotnet6webapplinux

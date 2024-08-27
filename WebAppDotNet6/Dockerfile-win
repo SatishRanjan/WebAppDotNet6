@@ -36,6 +36,6 @@ ENV WEBSITE_ISOLATION=hyperv
 ENTRYPOINT ["dotnet", "WebAppDotNet6.dll"]
 
 
-# docker build . -t sratdocker/dotnet6webappwindows -f Dockerfile-win
+# docker build . -t sratdocker/dotnet8webappwindows -f Dockerfile-win
 # expose webapp's container port 80 on host port 5001 and webjobs port 50555 on host port 5002
 # docker run -p 5001:80 -p 5002:50555 docker.io/sratdocker/dotnet6webappwindows
