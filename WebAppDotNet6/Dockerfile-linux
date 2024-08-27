@@ -1,11 +1,14 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
 #EXPOSE 50555
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+# Install procps
+RUN apt-get update && apt-get install -y procps
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["WebAppDotNet6.csproj", ""]
 RUN dotnet restore "./WebAppDotNet6.csproj"
@@ -25,9 +28,10 @@ COPY cert-test /cert-test
 COPY certsname-printer /certsname-printer
 COPY update-history-util /update-history-util
 COPY certificates/ /certs/
-COPY kuduagent /kuduagent
+COPY kuduagent_linux_x64 /kuduagent
 COPY startup /startup
 COPY greeter /greeter
+COPY linuxprocessenvironkeyutil /linuxprocessenvironkeyutil
 
 ENV WEBSITE_PRIVATE_CERTS_PATH="/certs/private"
 ENV WEBSITE_PUBLIC_CERTS_PATH="/certs/public"
@@ -39,10 +43,11 @@ ENV WEBSITE_OS=linux
 ENV WEBJOB_ENV=true
 ENV WEBJOB_HOME=/home
 #ENV Kestrel:Endpoints:Http:Url="http://*:80"
+#ENV ASPNETCORE_CONTENTROOT="/update-history-util"
 
 ENTRYPOINT ["dotnet", "WebAppDotNet6.dll"]
 #ENTRYPOINT ["bash", "/startup/startup.sh"]
 
-#docker build . -t sratdocker/dotnet6webapplinux -f Dockerfile-linux
+# docker build . -t sratdocker/dotnet6webapplinux -f Dockerfile-linux
 # expose webapp's container port 80 on host port 5001 and webjobs port 50555 on host port 5002
-#docker run -p 5001:80 -p 5002:50555 docker.io/sratdocker/dotnet6webapplinux
+# docker run -p 5001:80 -p 5002:50555 docker.io/sratdocker/dotnet6webapplinux

@@ -1,0 +1,23 @@
+{
+  "runtimeOptions": {
+    "tfm": "net8.0",
+    "includedFrameworks": [
+      {
+        "name": "Microsoft.NETCore.App",
+        "version": "8.0.8"
+      },
+      {
+        "name": "Microsoft.AspNetCore.App",
+        "version": "8.0.8"
+      }
+    ],
+    "configProperties": {
+      "System.Globalization.Invariant": true,
+      "System.IO.DisableFileLocking": true,
+      "System.StartupHookProvider.IsSupported": false,
+      "System.GC.Server": true,
+      "System.Reflection.Metadata.MetadataUpdater.IsSupported": false,
+      "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false
+    }
+  }
+}

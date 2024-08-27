@@ -1,0 +1,41 @@
+# Stage 1: Build .NET runtime image
+#FROM mcr.microsoft.com/dotnet/sdk:6.0 AS dotnet-sdk
+#FROM mcr.microsoft.com/dotnet/runtime:6.0 AS runtime
+
+# Stage 2: Build final image
+FROM mcr.microsoft.com/azure-app-service/java:11-java11_20231113 AS base
+#FROM mcr.microsoft.com/azure-app-service/java:17-java17_20231113 AS base
+
+# Update and install required packages
+RUN apk update && \
+    apk add gcompat libstdc++
+
+#ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
+# Set working directory
+WORKDIR /app
+
+# Expose ports
+EXPOSE 80
+
+# Copy kuduagent
+COPY kuduagent /kuduagent
+COPY kuduagent_linux_musl_x64 /kuduagent_linux_musl_x64
+COPY kuduagent_linux_x64_single_file /kuduagent_linux_x64_single_file
+COPY kuduagent_linux_musl_x64_singlefile /kuduagent_linux_musl_x64_singlefile
+
+# Set environment variables
+ENV WEBSITE_OS=linux
+ENV WEBJOB_ENV=true
+ENV WEBJOB_HOME=/home
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+RUN ulimit -s 65536
+
+#docker build . -t java-alpine -f Dockerfile_appsvc_java8
+#docker run -p 5002:50555 --mount type=bind,source=C:\Users\satishra.REDMOND\Downloads\dotnet-sdk-6.0.424-linux-x64,target=/usr/dotnetsdk docker.io/library/java-alpine
+#docker run -it --rm -p 80:80 -p 2222:2222 -p 20000:20000 -p 20001:20001 --mount type=bind,source=C:\tools\dotnet-sdk-6.0.421-linux-x64,target=/opt/dotnetsdk mcr.microsoft.com/azure-app-service/java:11-java11_20231113
+#dotnet publish -c Release -r linux-musl-x64 --self-contained -p:PublishSingleFile=true -o ./app/publish
+
+#OR
+#apk add gcompat libstdc++
+#export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1

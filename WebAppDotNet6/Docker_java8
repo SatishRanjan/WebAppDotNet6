@@ -1,0 +1,22 @@
+FROM mcr.microsoft.com/dotnet/runtime:6.0 as test
+
+FROM mcr.microsoft.com/azure-app-service/java:11-java11_20231113 AS base
+WORKDIR /app
+EXPOSE 80
+#EXPOSE 50555
+
+COPY kuduagent /kuduagent
+
+
+ENV WEBSITE_OS=linux
+ENV WEBJOB_ENV=true
+ENV WEBJOB_HOME=/home
+#ENV Kestrel:Endpoints:Http:Url="http://*:80"
+#ENV ASPNETCORE_CONTENTROOT="/update-history-util"
+
+#ENTRYPOINT ["dotnet", "WebAppDotNet6.dll"]
+#ENTRYPOINT ["bash", "/startup/startup.sh"]
+
+# docker build . -t sratdocker/dotnet6webapplinux -f Dockerfile-linux
+# expose webapp's container port 80 on host port 5001 and webjobs port 50555 on host port 5002
+# docker run -p 5001:80 -p 5002:50555 docker.io/sratdocker/dotnet6webapplinux
