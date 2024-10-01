@@ -19,7 +19,7 @@ WORKDIR /app
 EXPOSE 80
 
 # Copy kuduagent
-COPY kuduagent /kuduagent
+COPY kuduagent_linux_x64 /kuduagent
 COPY kuduagent_linux_musl_x64 /kuduagent_linux_musl_x64
 COPY kuduagent_linux_x64_single_file /kuduagent_linux_x64_single_file
 COPY kuduagent_linux_musl_x64_singlefile /kuduagent_linux_musl_x64_singlefile
@@ -35,6 +35,8 @@ RUN ulimit -s 65536
 #docker run -p 5002:50555 --mount type=bind,source=C:\Users\satishra.REDMOND\Downloads\dotnet-sdk-6.0.424-linux-x64,target=/usr/dotnetsdk docker.io/library/java-alpine
 #docker run -it --rm -p 80:80 -p 2222:2222 -p 20000:20000 -p 20001:20001 --mount type=bind,source=C:\tools\dotnet-sdk-6.0.421-linux-x64,target=/opt/dotnetsdk mcr.microsoft.com/azure-app-service/java:11-java11_20231113
 #dotnet publish -c Release -r linux-musl-x64 --self-contained -p:PublishSingleFile=true -o ./app/publish
+
+# docker run -p 5002:50555 -v C:/temp/data/jobs:/home/data/jobs:rw --name c1 sratdocker/dotnet6webapplinux
 
 #OR
 #apk add gcompat libstdc++

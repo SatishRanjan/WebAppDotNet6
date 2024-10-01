@@ -10,14 +10,14 @@ RUN apt-get update && apt-get install -y procps
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["WebAppDotNet6.csproj", ""]
-RUN dotnet restore "./WebAppDotNet6.csproj"
+COPY ["WebAppDotNet8.csproj", ""]
+RUN dotnet restore "./WebAppDotNet8.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "WebAppDotNet6.csproj" -c Release -o /app/build
+RUN dotnet build "WebAppDotNet8.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "WebAppDotNet6.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "WebAppDotNet8.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
@@ -45,9 +45,15 @@ ENV WEBJOB_HOME=/home
 #ENV Kestrel:Endpoints:Http:Url="http://*:80"
 #ENV ASPNETCORE_CONTENTROOT="/update-history-util"
 
-ENTRYPOINT ["dotnet", "WebAppDotNet6.dll"]
+ENTRYPOINT ["dotnet", "WebAppDotNet8.dll"]
 #ENTRYPOINT ["bash", "/startup/startup.sh"]
 
 # docker build . -t sratdocker/dotnet8webapplinux -f Dockerfile-linux
 # expose webapp's container port 80 on host port 5001 and webjobs port 50555 on host port 5002
 # docker run -p 5001:80 -p 5002:50555 docker.io/sratdocker/dotnet6webapplinux
+
+# docker run -p 5002:50555 -v C:/temp/home:/home:rw sratdocker/dotnet8webapplinux
+
+# docker run -p 5003:50555 -v C:/temp/home:/home:rw sratdocker/dotnet8webapplinux
+
+# docker exec -w /kuduagent -d <container_id> bash -c "dotnet kuduagent.dll"

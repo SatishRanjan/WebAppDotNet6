@@ -2542,7 +2542,7 @@
         "runtime": {
           "Kudu.Contracts.dll": {
             "assemblyVersion": "9.8.7.6",
-            "fileVersion": "101.0.0.0"
+            "fileVersion": "103.0.0.0"
           }
         }
       },
@@ -2571,7 +2571,7 @@
         "runtime": {
           "Kudu.Core.dll": {
             "assemblyVersion": "9.8.7.6",
-            "fileVersion": "101.0.0.0"
+            "fileVersion": "103.0.0.0"
           }
         }
       }

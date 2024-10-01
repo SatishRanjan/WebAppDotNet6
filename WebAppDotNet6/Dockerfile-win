@@ -1,17 +1,17 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-nanoserver-20H2 AS base
-#FROM mcr.microsoft.com/dotnet/aspnet:6.0-nanoserver-ltsc2022 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-nanoserver-1809 AS base
+#FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-ltsc2022 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["WebAppDotNet6.csproj", ""]
-RUN dotnet restore "./WebAppDotNet6.csproj"
+COPY ["WebAppDotNet8.csproj", ""]
+RUN dotnet restore "./WebAppDotNet8.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "WebAppDotNet6.csproj" -c Release -o /app/build
+RUN dotnet build "WebAppDotNet8.csproj" -c Release -o /app/build
 FROM build AS publish
-RUN dotnet publish "WebAppDotNet6.csproj" -c Release -o /app/publish
+RUN dotnet publish "WebAppDotNet8.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
@@ -39,3 +39,5 @@ ENTRYPOINT ["dotnet", "WebAppDotNet6.dll"]
 # docker build . -t sratdocker/dotnet8webappwindows -f Dockerfile-win
 # expose webapp's container port 80 on host port 5001 and webjobs port 50555 on host port 5002
 # docker run -p 5001:80 -p 5002:50555 docker.io/sratdocker/dotnet6webappwindows
+
+# docker run -p 5003:50555 -v C:/temp/home:C:/home:rw sratdocker/dotnet8webappwindows
