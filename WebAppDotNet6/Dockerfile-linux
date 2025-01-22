@@ -8,6 +8,11 @@ EXPOSE 80
 # Install procps
 RUN apt-get update && apt-get install -y procps
 
+# Update the package list and install curl
+RUN apt-get update && \
+    apt-get install -y curl && \
+    apt-get clean
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["WebAppDotNet8.csproj", ""]
@@ -32,18 +37,21 @@ COPY kuduagent_linux_x64 /kuduagent
 COPY startup /startup
 COPY greeter /greeter
 COPY linuxprocessenvironkeyutil /linuxprocessenvironkeyutil
+#COPY j1 /continuous/c1
+
 
 ENV WEBSITE_PRIVATE_CERTS_PATH="/certs/private"
 ENV WEBSITE_PUBLIC_CERTS_PATH="/certs/public"
 ENV WEBSITE_INTERMEDIATE_CERTS_PATH="/certs/intermediate"
 ENV WEBSITE_ROOT_CERTS_PATH="/certs/root"
 COPY startuphook /startuphook
-ENV DOTNET_STARTUP_HOOKS="/startuphook/StaruphookLib.dll"
+# ENV DOTNET_STARTUP_HOOKS="/startuphook/StaruphookLib.dll"
 ENV WEBSITE_OS=linux
 ENV WEBJOB_ENV=true
 ENV WEBJOB_HOME=/home
-#ENV Kestrel:Endpoints:Http:Url="http://*:80"
+ENV Kestrel:Endpoints:Http:Url="http://*:80"
 #ENV ASPNETCORE_CONTENTROOT="/update-history-util"
+ENV WEBSITE_SKIP_RUNNING_KUDUAGENT=false
 
 ENTRYPOINT ["dotnet", "WebAppDotNet8.dll"]
 #ENTRYPOINT ["bash", "/startup/startup.sh"]
@@ -52,8 +60,15 @@ ENTRYPOINT ["dotnet", "WebAppDotNet8.dll"]
 # expose webapp's container port 80 on host port 5001 and webjobs port 50555 on host port 5002
 # docker run -p 5001:80 -p 5002:50555 docker.io/sratdocker/dotnet6webapplinux
 
+# docker run -p 5001:80 -p 5002:50555 docker.io/sratdocker/dotnet8webapplinux
+
 # docker run -p 5002:50555 -v C:/temp/home:/home:rw sratdocker/dotnet8webapplinux
 
 # docker run -p 5003:50555 -v C:/temp/home:/home:rw sratdocker/dotnet8webapplinux
 
 # docker exec -w /kuduagent -d <container_id> bash -c "dotnet kuduagent.dll"
+
+# docker run -p 5002:50555 -v C:/temp/localkuduagentmnt:/localkuduagent:rw mcr.microsoft.com/appsvc/python:3.10_20240619.3.tuxprod
+
+# docker run -p 5002:50555 -v C:/temp/localkuduagentmnt:/localkuduagent:rw docker.io/sratdocker/python310webjobtest
+

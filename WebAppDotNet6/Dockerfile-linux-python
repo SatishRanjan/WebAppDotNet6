@@ -1,0 +1,12 @@
+# Use Debian Bullseye (version 11) as the base image
+FROM mcr.microsoft.com/appsvc/python:3.10_20240619.3.tuxprod 
+ENV WEBSITE_OS=linux
+ENV WEBJOB_ENV=true
+ENV WEBJOB_HOME=/home
+ENV WEBSITE_SKIP_RUNNING_KUDUAGENT=false
+
+# docker build . -t sratdocker/python310webjobtest -f Dockerfile-linux-python
+# docker run -p 5002:50555 -v C:/temp/localkuduagentmnt:/localkuduagent:rw docker.io/sratdocker/python310webjobtest
+
+# copy App_Data directory from local machine into container's /home/site/wwwroot directory, so the directory in the destination becomes /home/site/wwwroot/App_Data
+# docker cp "C:\Users\satishra.REDMOND\OneDrive - Microsoft\Antares\WebJobKuduTesting\python\App_Data" cb5f992a1068:/home/site/wwwroot
